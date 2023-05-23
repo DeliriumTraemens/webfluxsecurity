@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+
 }
 
 group = 'org.mykola'
@@ -17,36 +18,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+
+    implementation "io.r2dbc:r2dbc-postgresql:$r2dbcVersion"
+    implementation "org.postgresql:postgresql:$postgreSqlVersion"
+
+    implementation "org.flywaydb:flyway-core:$flywayDbVersion"
+    implementation "com.google.code.findbugs:jsr305:$googleFindBugsVersion"
+
+    implementation "org.mapstruct:mapstruct:$mapStructVersion"
+
+    implementation "io.jsonwebtoken:jjwt:$jsonWebTokenVersion"
+    implementation "javax.xml.bind:jaxb-api:$jaxbApiVersion"
+    implementation 'org.projectlombok:lombok:1.18.18'
+
+    compileOnly('org.projectlombok:lombok')
+    annotationProcessor "org.projectlombok:lombok"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
 
 
-    // https://mvnrepository.com/artifact/dev.miku/r2dbc-mysql
-    implementation group: 'dev.miku', name: 'r2dbc-mysql', version: '0.8.2.RELEASE'
-
-    implementation 'org.flywaydb:flyway-core'
-
-    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-
-    // https://mvnrepository.com/artifact/org.mapstruct/mapstruct
-    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
-
-	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-
-	// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
-
-	compileOnly 'org.projectlombok:lombok'
-	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
-	implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
-
-
-
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
 }
 //
 //tasks.named('test') {
