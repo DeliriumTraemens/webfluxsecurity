@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.mykola.webfluxsecurity.entity.UserEntity;
+import org.mykola.webfluxsecurity.exception.AuthException;
 import org.mykola.webfluxsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,17 +66,17 @@ public class SecurityService {
         return userRepository.findByUserName(username)
                 .flatMap(user -> {
                     if (!user.isEnabled()) {
-                        return Mono.error(new RuntimeException("User is not enabled"));
+                        return Mono.error(new AuthException("User is disabled", "GRIGORICH_USER_ACCOUNT_DISABLED"));
                     }
                     if (!passwordEncoder.matches(password, user.getPassword())) {
-                        return Mono.error(new RuntimeException("User password is incorrect"));
+                        return Mono.error(new AuthException("Invalid password", "GRIGORICH_INVALID_PASSWORD"));
                     }
 //                    return Mono.just(new TokenDetails());
                     return Mono.just(generateToken(user).toBuilder()
                             .userId(user.getId())
                             .build());
                 })
-                .switchIfEmpty(Mono.error(new RuntimeException("Username not found")));
+                .switchIfEmpty(Mono.error(new AuthException("Invalid username", "GRIGORICH_INVALID_USERNAME")));
     }
 // video 34.22
 }
