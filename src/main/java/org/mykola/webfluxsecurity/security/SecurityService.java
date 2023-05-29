@@ -70,7 +70,10 @@ public class SecurityService {
                     if (!passwordEncoder.matches(password, user.getPassword())) {
                         return Mono.error(new RuntimeException("User password is incorrect"));
                     }
-                    return Mono.just(new TokenDetails());
+//                    return Mono.just(new TokenDetails());
+                    return Mono.just(generateToken(user).toBuilder()
+                            .userId(user.getId())
+                            .build());
                 })
                 .switchIfEmpty(Mono.error(new RuntimeException("Username not found")));
     }
