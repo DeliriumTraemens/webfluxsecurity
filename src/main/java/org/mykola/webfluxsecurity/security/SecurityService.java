@@ -1,6 +1,7 @@
 package org.mykola.webfluxsecurity.security;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.mykola.webfluxsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +27,13 @@ public class SecurityService {
     @Value("${jwt.issuer}")
     private String issuer;
 
+    private TokenDetails generateToken(Map<String, Object> claims, String subject){
+        Long expirationTimeInMillis= expirationInSeconds * 1000L;
+        Date expirationDate= new Date(new Date().getTime() + expirationTimeInMillis);
+
+        return generateToken(expirationDate, claims, subject);
+    }
+
     private TokenDetails generateToken(Date expirationDate, Map<String, Object> claims, String subject){
 
         Date createdDate = new Date();
@@ -35,6 +44,7 @@ public class SecurityService {
                     .setIssuedAt(createdDate)
                     .setId(UUID.randomUUID().toString())
                     .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.ES256, Base64.getEncoder().encodeToString(secret.getBytes()))
                 .compact();
 
         return TokenDetails.builder()
