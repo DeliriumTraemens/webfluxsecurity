@@ -40,7 +40,7 @@ public class JwtHandler {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
+//============= INNER CLASS ============
     public static class VerificationResult{
         public Claims claims;
         public String token;
