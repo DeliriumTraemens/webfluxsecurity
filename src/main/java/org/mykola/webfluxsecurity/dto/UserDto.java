@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class UserDto {
     private Long id;
-    private String userName;
+    private String username;
 
     @JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
     private String password;

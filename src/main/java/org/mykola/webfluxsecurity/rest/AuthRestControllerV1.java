@@ -9,6 +9,7 @@ import org.mykola.webfluxsecurity.mapper.UserMapper;
 import org.mykola.webfluxsecurity.repository.UserRepository;
 import org.mykola.webfluxsecurity.security.CustomPrincipal;
 import org.mykola.webfluxsecurity.security.SecurityService;
+import org.mykola.webfluxsecurity.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -18,13 +19,13 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v1/auth")
 public class AuthRestControllerV1 {
     private final SecurityService securityService;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserMapper userMapper;
 
     @PostMapping("/register")
     public Mono<UserDto> register(@RequestBody UserDto dto) {
         UserEntity entity = userMapper.map(dto);
-        return userRepository.save(entity).map(userMapper::map);
+        return userService.registerUser(entity).map(userMapper::map);
     }
 
     @PostMapping("/login")
@@ -41,7 +42,7 @@ public class AuthRestControllerV1 {
     @GetMapping("/info")
     public Mono<UserDto>getUserInfo(Authentication authentication){
         CustomPrincipal customPrincipal = (CustomPrincipal) authentication.getPrincipal();
-        return userRepository.findById(customPrincipal.getId())
+        return userService.getUserById(customPrincipal.getId())
                 .map(userMapper::map);
     }
 

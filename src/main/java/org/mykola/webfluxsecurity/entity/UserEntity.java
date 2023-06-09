@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class UserEntity {
     @Id
     private Long id;
-    private String userName;
+    private String username;
     private String password;
     private UserRole role;
     private String firstName;
