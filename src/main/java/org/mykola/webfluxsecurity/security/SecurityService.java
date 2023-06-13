@@ -70,8 +70,9 @@ public class SecurityService {
                 .build();
     }
 
+//    Вытащить юзера из базы, сверить пароли - сырой и закодированный(из базы)
+//    и если пароли совпадают, вернуть Моно с токеном. Если Не совпадают - кинуть ошибку
     public Mono<TokenDetails> authenticate(String username, String password) {
-
 
         return userService.getUserByUsername(username)
                 .flatMap(user -> {

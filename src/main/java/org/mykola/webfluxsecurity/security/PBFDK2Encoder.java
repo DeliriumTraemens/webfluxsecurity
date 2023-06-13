@@ -21,6 +21,7 @@ public class PBFDK2Encoder implements PasswordEncoder {
     private Integer iteration;
     @Value("${jwt.password.encoder.keylength}")
     private Integer keyLength;
+//    Содержит строку с названием алгоритма хэширования - смотреть в списке алгосов либы
     private static final String SECRET_KEY_INSTANCE = "PBKDF2WithHmacSHA512";
 
     @Override
@@ -28,19 +29,20 @@ public class PBFDK2Encoder implements PasswordEncoder {
     {
 
         try {
-            byte[] result = SecretKeyFactory.getInstance(SECRET_KEY_INSTANCE)
+            byte[] result = SecretKeyFactory.getInstance(SECRET_KEY_INSTANCE)//вытаскиваем инстанс алгоритма
                     .generateSecret(new PBEKeySpec(rawPassword.toString().toCharArray(),
                             secret.getBytes(), iteration, keyLength))
                     .getEncoded();
-            return Base64.getEncoder()
-                    .encodeToString(result);
+            return Base64.getEncoder()//.дайЭнкодер
+                    .encodeToString(result);//.иЗакодируйМнеВСтроку
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
 
+    //сравниваем простой пароль с фронта с закодированным результатом из БД
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return encode(rawPassword).equals(encodedPassword);
+        return encode(rawPassword).equals(encodedPassword);//encode returns string
     }
 }
